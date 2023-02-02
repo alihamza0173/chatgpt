@@ -21,7 +21,7 @@ Start the app
 
 <pre>flutter run</pre>
 
-#Note
+# Note
 You will need to replace 'YOUR_API_KEY' with your actual API key.
 
 You can get an API key for [OpenAI's GPT-3](https://openai.com/)

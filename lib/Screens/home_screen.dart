@@ -133,12 +133,18 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
             child: TextFormField(
-              onFieldSubmitted: (value) {
+              onFieldSubmitted: (value) async {
                 if (_textController.text.isEmpty) {
                   return;
                 }
-                _getResponseFromAPI(value);
-                FocusScope.of(context).unfocus();
+                String res = await _getResponseFromAPI(value);
+                if (res == 'Failed to get response from API') {
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(res),
+                    duration: const Duration(seconds: 1),
+                  ));
+                }
               },
               controller: _textController,
               enabled: !_isTyping,
@@ -148,12 +154,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.send,
                     color: Colors.white,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_textController.text.isEmpty) {
                       return;
                     }
-                    _getResponseFromAPI(_textController.text);
-                    FocusScope.of(context).unfocus();
+                    String res =
+                        await _getResponseFromAPI(_textController.text);
+                    if (res == 'Failed to get response from API') {
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(res),
+                        duration: const Duration(seconds: 1),
+                      ));
+                    }
                   },
                 ),
                 hintText: 'Send your query',
