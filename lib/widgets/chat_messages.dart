@@ -27,7 +27,7 @@ class ChatMessage extends StatelessWidget {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.only(top: 5.0),
-                child: Text(text, style: const TextStyle(color: Colors.white),),
+                child: SelectableText(text, style: const TextStyle(color: Colors.white),),
               ),
             ),
           ],

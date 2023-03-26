@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _textController = TextEditingController();
   final List<ChatMessage> _list = [];
   bool _isTyping = false;
+  String conversationHistory = '';
 
   Future<String> _getResponseFromAPI(String prompt) async {
     setState(() {
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: json.encode({
         "model": "gpt-3.5-turbo",
         "messages": [
-          {"role": "user", "content": prompt}
+          {"role": "user", "content": '$conversationHistory $prompt'}
         ]
       }),
     );
@@ -43,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
       final content = responseJson['choices'][0]['message']['content'];
+      conversationHistory += '$prompt\n$content\n';
+      print('conversationHistory: $conversationHistory');
       setState(() {
         _isTyping = false;
         _list.insert(0, ChatMessage(sender: 'bot', text: content));
