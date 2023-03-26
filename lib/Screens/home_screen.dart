@@ -45,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
       final responseJson = json.decode(response.body);
       final content = responseJson['choices'][0]['message']['content'];
       conversationHistory += '$prompt\n$content\n';
-      print('conversationHistory: $conversationHistory');
       setState(() {
         _isTyping = false;
         _list.insert(0, ChatMessage(sender: 'bot', text: content));
@@ -93,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
             child: TextFormField(
+              keyboardType: TextInputType.text,
               onFieldSubmitted: (value) async {
                 if (_textController.text.isEmpty) {
                   return;
@@ -107,14 +107,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               },
               controller: _textController,
-              enabled: !_isTyping,
               decoration: InputDecoration(
                 suffixIcon: IconButton(
                   icon: const Icon(
                     Icons.send,
                     color: Colors.white,
                   ),
-                  onPressed: () async {
+                   onPressed: () async {
+                    if(_isTyping){
+                      return;
+                    }
                     if (_textController.text.isEmpty) {
                       return;
                     }
