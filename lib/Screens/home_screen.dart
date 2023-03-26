@@ -18,10 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<ChatMessage> _list = [];
   bool _isTyping = false;
 
-  // ChatGPT? chatGPT;
-
-  // StreamSubscription? _subscription;
-
   Future<String> _getResponseFromAPI(String prompt) async {
     setState(() {
       _isTyping = true;
@@ -31,30 +27,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
     const apiKey = apikey;
     final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/completions'),
+      Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $apiKey',
       },
       body: json.encode({
-        "model": "text-davinci-003",
-        "prompt": prompt,
-        'temperature': 0,
-        'max_tokens': 4000,
-        'top_p': 1,
-        'frequency_penalty': 0.0,
-        'presence_penalty': 0.0,
+        "model": "gpt-3.5-turbo",
+        "messages": [
+          {"role": "user", "content": prompt}
+        ]
       }),
     );
 
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
+      final content = responseJson['choices'][0]['message']['content'];
       setState(() {
         _isTyping = false;
-        _list.insert(
-            0,
-            ChatMessage(
-                sender: 'bot', text: responseJson['choices'][0]['text']));
+        _list.insert(0, ChatMessage(sender: 'bot', text: content));
       });
       return 'Success';
     } else {
@@ -65,42 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // void _sendMessage() {
-  //   setState(() {
-  //     _list.insert(0, ChatMessage(sender: 'user', text: _textController.text));
-  //   });
-  //   _textController.clear();
-
-  //   final request = CompleteReq(
-  //       prompt: _textController.text,
-  //       model: kTranslateModelV3,
-  //       max_tokens: 200);
-
-  //   try {
-  //     _subscription = chatGPT!
-  //         .builder('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')
-  //         .onCompleteStream(request: request)
-  //         .listen((response) {
-  //       print(response!.choices[0].text);
-  //       setState(() {
-  //         _list.insert(
-  //             0, ChatMessage(sender: 'bot', text: response.choices[0].text));
-  //       });
-  //     });
-  //   } catch (error) {
-  //     print(error);
-  //   }
-  // }
-
-  // @override
-  // void initState() {
-  //   chatGPT = ChatGPT.instance;
-  //   super.initState();
-  // }
-
   @override
   void dispose() {
-    // _subscription?.cancel();
     _textController.dispose();
     super.dispose();
   }
