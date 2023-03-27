@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ChatMessage extends StatelessWidget {
   final String sender, text;
@@ -32,9 +33,35 @@ class ChatMessage extends StatelessWidget {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.only(top: 5.0),
-                child: SelectableText(
-                  text,
-                  style: const TextStyle(color: Colors.white),
+                child: MarkdownBody(
+                  selectable: true,
+                  data: text,
+                  styleSheet: MarkdownStyleSheet(
+                    p: const TextStyle(color: Colors.white),
+                    h1: const TextStyle(color: Colors.white),
+                    h2: const TextStyle(color: Colors.white),
+                    h3: const TextStyle(color: Colors.white),
+                    h4: const TextStyle(color: Colors.white),
+                    h5: const TextStyle(color: Colors.white),
+                    h6: const TextStyle(color: Colors.white),
+                    em: const TextStyle(color: Colors.white),
+                    strong: const TextStyle(color: Colors.white),
+                    code: const TextStyle(color: Colors.green),
+                    a: const TextStyle(color: Colors.white),
+                    blockquote: const TextStyle(color: Colors.white),
+                    blockSpacing: 10.0,
+                    listIndent: 20.0,
+                    blockquoteDecoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 52, 52, 65),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    codeblockPadding: const EdgeInsets.all(10.0),
+                    codeblockDecoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 52, 52, 65),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    
+                  ),
                 ),
               ),
             ),
