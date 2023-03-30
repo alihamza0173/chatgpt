@@ -32,7 +32,7 @@ Start the app
 To start using ChatGPT, you need an OpenAI API key. Set your API key in the const.dart file.
 
 ```dart
-const apikey = 'YOUR_API_KEY_HERE';
+    const apikey = 'OPENAI_API_KEY';
 ```
 
 You can get an API key for [OpenAI's GPT-3](https://openai.com/)

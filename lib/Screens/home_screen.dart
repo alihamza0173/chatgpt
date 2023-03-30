@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     _textController.clear();
 
-    const apiKey = apikey;
+    const apiKey = OPENAI_API_KEY;
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
