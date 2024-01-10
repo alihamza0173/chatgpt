@@ -1,4 +1,4 @@
-import 'package:chat_gpt/Screens/home_screen.dart';
+import 'package:chat_gpt/Screens/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,13 +9,14 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
+  Widget build(BuildContext context) { 
+    return const MaterialApp( 
+       title: 'Chat GPT',
+         debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(
-        child: HomeScreen(),
-      ),
+          child: HomePage(),
+        ),
       ),
     );
   }

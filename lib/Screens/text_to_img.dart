@@ -6,18 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class TxtToImg extends StatefulWidget {
+  const TxtToImg({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<TxtToImg> createState() => _TxtToImgState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _TxtToImgState extends State<TxtToImg> {
   final _textController = TextEditingController();
   final List<ChatMessage> _list = [];
   bool _isTyping = false;
-  String conversationHistory = '';
 
   Future<String> _getResponseFromAPI(String prompt) async {
     setState(() {
@@ -28,26 +27,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     const apiKey = OPENAI_API_KEY;
     final response = await http.post(
-      Uri.parse('https://api.openai.com/v1/chat/completions'),
+      Uri.parse('https://api.openai.com/v1/images/generations'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $apiKey',
       },
-      body: json.encode({
-        "model": "gpt-3.5-turbo",
-        "messages": [
-          {"role": "user", "content": '$conversationHistory $prompt'}
-        ]
-      }),
+      body: json.encode(
+          {"prompt": prompt, "n": 2, "size": "1024x1024"}),
     );
 
     if (response.statusCode == 200) {
       final responseJson = json.decode(response.body);
-      final content = responseJson['choices'][0]['message']['content'];
-      conversationHistory += '$prompt\n$content\n';
+      final content = responseJson['data'];
       setState(() {
         _isTyping = false;
-        _list.insert(0, ChatMessage(sender: 'bot', text: content));
+        _list.insert(0, ChatMessage(sender: 'bot', img: content, txtToImg: true,));
       });
       return 'Success';
     } else {
@@ -70,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: const Color.fromARGB(255, 68, 70, 84),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 32, 33, 35),
-        title: const Text('ChatGPT'),
+        title: const Text('TxtToImg'),
         centerTitle: true,
       ),
       body: Column(
@@ -113,8 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.send,
                     color: Colors.white,
                   ),
-                   onPressed: () async {
-                    if(_isTyping){
+                  onPressed: () async {
+                    if (_isTyping) {
                       return;
                     }
                     if (_textController.text.isEmpty) {
